@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Supermarket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      background-color: #2ecc71;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    main {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+    }
+
+    .products, .cart {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 40%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .product {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Supermarket</h1>
+  </header>
+
+  <main>
+    <section class="products">
+      <h2>Products</h2>
+      <div class="product-list" id="product-list">
+        <!-- Products will be displayed here -->
+      </div>
+    </section>
+
+    <section class="cart">
+      <h2>Shopping Cart</h2>
+      <ul id="cart-items">
+        <!-- Cart items will appear here -->
+      </ul>
+      <p>Total: $<span id="total">0.00</span></p>
+      <button id="checkout">Checkout</button>
+    </section>
+  </main>
+
+  <script>
+    // List of products
+    const products = [
+      { id: 1, name: "Apple", price: 1 },
+      { id: 2, name: "Banana", price: 0.5 },
+      { id: 3, name: "Milk", price: 2 },
+      { id: 4, name: "Bread", price: 1.5 }
+    ];
+
+    const productList = document.getElementById("product-list");
+    const cartItems = document.getElementById("cart-items");
+    const totalEl = document.getElementById("total");
+
+    let cart = [];
+
+    // Display products
+    products.forEach(product => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <span>${product.name} - $${product.price}</span>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+      `;
+      productList.appendChild(div);
+    });
+
+    // Add product to cart
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      cart.push(product);
+      updateCart();
+    }
+
+    // Update cart display
+    function updateCart() {
+      cartItems.innerHTML = "";
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price;
+        const li = document.createElement("li");
+        li.textContent = `${item.name} - $${item.price}`;
+        cartItems.appendChild(li);
+      });
+      totalEl.textContent = total.toFixed(2);
+    }
+
+    // Checkout button
+    document.getElementById("checkout").addEventListener("click", () => {
+      if(cart.length === 0){
+        alert("Your cart is empty!");
+        return;
+      }
+      alert(`Total amount: $${totalEl.textContent}. Thank you for shopping!`);
+      cart = [];
+      updateCart();
+    });
+  </script>
+</body>
+</html>
